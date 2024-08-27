@@ -1,0 +1,8 @@
+# Default settings for prometheus
+# This file is sourced by /etc/init.d/prometheus
+
+# Additional arguments to pass to prometheus
+ARGS="--config.file=/etc/prometheus/prometheus.yml"
+
+# User to run prometheus as
+USER="root"
