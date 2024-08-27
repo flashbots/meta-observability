@@ -1,1 +1,1 @@
-PACKAGE_INSTALL:append = ""
+PACKAGE_INSTALL:append = " fluent-bit"
