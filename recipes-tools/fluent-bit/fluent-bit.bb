@@ -30,14 +30,29 @@ inherit cmake pkgconfig update-rc.d
 EXTRA_OECMAKE += "\
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBDIR=lib \
-    -DFLB_CORO_STACK_SIZE=24576 \
-    -DFLB_TESTS_INTERNAL=Yes \
+    -DFLB_ALL=No \
     -DFLB_TLS=Yes \
+    -DFLB_SHARED_LIB=Yes \
+    -DFLB_EXAMPLES=No \
     -DFLB_HTTP_SERVER=Yes \
+    -DFLB_IN_SYSTEMD=No \
     -DFLB_OUT_KAFKA=No \
-    -DFLB_SYSTEM_LUAJIT=No \
     -DFLB_LUAJIT=No \
     -DFLB_WASM=No \
+    -DFLB_STREAM_PROCESSOR=No \
+    -DFLB_TESTS_RUNTIME=No \
+    -DFLB_TESTS_INTERNAL=No \
+    -DFLB_TESTS=No \
+    -DFLB_IN_CPU=Yes \
+    -DFLB_IN_MEM=Yes \
+    -DFLB_IN_TAIL=Yes \
+    -DFLB_OUT_STDOUT=Yes \
+    -DFLB_OUT_FILE=Yes \
+    -DFLB_OUT_HTTP=Yes \
+    -DFLB_OUT_PROMETHEUS_EXPORTER=Yes \
+    -DFLB_SQLDB=No \
+    -DFLB_OUT_KAFKA_REST=No \
+    -DFLB_IN_SERIAL=No \
     "
 
 do_install:append() {
