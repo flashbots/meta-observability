@@ -1,1 +1,1 @@
-PACKAGE_INSTALL:append = " fluent-bit"
+PACKAGE_INSTALL:append = " fluent-bit prometheus"

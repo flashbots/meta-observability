@@ -1,8 +1,30 @@
 # Default settings for prometheus
 # This file is sourced by /etc/init.d/prometheus
 
-# Additional arguments to pass to prometheus
-ARGS="--config.file=/etc/prometheus/prometheus.yml"
+# User and group to run prometheus as
+USER="prometheus"
+GROUP="prometheus"
 
-# User to run prometheus as
-USER="root"
+# Path to Prometheus configuration file
+CONFIG="/etc/prometheus/prometheus.yml"
+
+# Path to Prometheus data directory
+DATA_DIR="/var/lib/prometheus"
+
+# Path to Prometheus log file
+LOG_FILE="/tmp/prometheus.log"
+
+# Additional arguments to pass to prometheus
+ARGS="--config.file=${CONFIG} \
+      --storage.tsdb.path=${DATA_DIR} \
+      --web.console.templates=/usr/share/prometheus/consoles \
+      --web.console.libraries=/usr/share/prometheus/console_libraries"
+
+# Uncomment and modify the following line to change the default listening address
+#ARGS="${ARGS} --web.listen-address=0.0.0.0:9090"
+
+# Uncomment and modify the following line to enable remote write
+#ARGS="${ARGS} --enable-feature=remote-write-receiver"
+
+# Uncomment and modify the following line to change retention time (default is 15d)
+#ARGS="${ARGS} --storage.tsdb.retention.time=30d"
