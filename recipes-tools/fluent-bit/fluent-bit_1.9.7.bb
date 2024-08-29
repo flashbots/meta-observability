@@ -81,23 +81,43 @@ EXTRA_OECMAKE:append:x86 = " -DCMAKE_C_STANDARD_LIBRARIES=-latomic"
 
 CFLAGS:append:x86 = " -DMBEDTLS_HAVE_SSE2"
 
-inherit cmake update-rc.d pkgconfig
+inherit cmake update-rc.d useradd pkgconfig
 
+#USERADD_PACKAGES = "${PN}"
+#GROUPADD_PARAM:${PN} = "-r fluentbit"
+#USERADD_PARAM:${PN} = "-r -g fluentbit -s /sbin/nologin -d /nonexistent fluentbit"
+USERADD_PACKAGES = "${PN}"
+GROUPADD_PARAM:${PN} = "-r fluentbit"
+USERADD_PARAM:${PN} = "-r -g fluentbit -d /var/lib/td-agent-bit -s /sbin/nologin -c 'Fluent Bit' fluentbit"
 
 EXTRA_OECMAKE += "-DCMAKE_DEBUG_SRCDIR=${TARGET_DBGSRC_DIR}/"
 TARGET_CC_ARCH += " ${SELECTED_OPTIMIZATION}"
 
 do_install:append() {
     install -d ${D}${sysconfdir}/init.d
-    install -m 0755 ${WORKDIR}/fluent-bit.init ${D}${sysconfdir}/init.d/fluent-bit
+    install -m 0755 ${WORKDIR}/fluent-bit.init ${D}${sysconfdir}/init.d/td-agent-bit
 
     # Move configuration files to /etc
-    install -d ${D}${sysconfdir}/fluent-bit
-    if [ -d ${D}/usr/etc/fluent-bit ]; then
-        mv ${D}/usr/etc/fluent-bit/* ${D}${sysconfdir}/fluent-bit/
+    install -d ${D}${sysconfdir}/td-agent-bit
+    if [ -d ${D}/usr/etc/td-agent-bit ]; then
+        mv ${D}/usr/etc/td-agent-bit/* ${D}${sysconfdir}/td-agent-bit/
         rm -rf ${D}/usr/etc
     fi
+
+    install -d ${D}/var/lib/td-agent-bit
+    # Set correct ownership and permissions
+    chown -R fluentbit:fluentbit ${D}/var/lib/td-agent-bit
+    chown fluentbit:fluentbit ${D}${sysconfdir}/td-agent-bit/td-agent-bit.conf
+    chmod 0644 ${D}${sysconfdir}/td-agent-bit/td-agent-bit.conf
 }
 
-INITSCRIPT_NAME = "fluent-bit"
-INITSCRIPT_PARAMS = "defaults"
+pkg_postinst_ontarget:${PN}() {
+    # Ensure the log file can be created by the fluentbit user
+    touch /tmp/td-agent-bit.log
+    chown fluentbit:fluentbit /tmp/td-agent-bit.log
+}
+
+FILES:${PN} += "${sysconfdir}"
+
+INITSCRIPT_NAME = "td-agent-bit"
+INITSCRIPT_PARAMS = "defaults 85 15"
