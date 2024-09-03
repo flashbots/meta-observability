@@ -1,0 +1,17 @@
+# Default settings for process-exporter
+
+# Options to pass to process-exporter
+ARGS="-config.path=/etc/process-exporter/process-exporter.yaml"
+
+# User and group to run process-exporter as
+USER="process-exporter"
+GROUP="process-exporter"
+
+# Path to the process-exporter binary
+DAEMON="/usr/bin/process-exporter"
+
+# Path to the PID file
+PIDFILE="/var/run/process-exporter.pid"
+
+# Path to the log file
+LOGFILE="/tmp/process-exporter.log"
