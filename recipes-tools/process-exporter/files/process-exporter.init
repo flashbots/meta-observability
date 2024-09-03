@@ -1,0 +1,71 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          process-exporter
+# Required-Start:    $local_fs $network $named $time $syslog
+# Required-Stop:     $local_fs $network $named $time $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Description:       Prometheus Process Exporter
+### END INIT INFO
+
+# Set default values
+DAEMON="/usr/bin/process-exporter"
+USER="process-exporter"
+GROUP="process-exporter"
+PIDFILE="/var/run/process-exporter.pid"
+LOGFILE="/tmp/process-exporter.log"
+CONFIG="/etc/process-exporter/process-exporter.yaml"
+ARGS="-config.path=$CONFIG"
+
+# Read configuration variable file if it is present
+[ -r /etc/default/process-exporter ] && . /etc/default/process-exporter
+
+start() {
+    if [ -f $PIDFILE ] && kill -0 $(cat $PIDFILE) 2>/dev/null; then
+        echo 'Service already running' >&2
+        return 1
+    fi
+    echo 'Starting service…' >&2
+    start-stop-daemon --start --quiet --background \
+        --make-pidfile --pidfile $PIDFILE \
+        --chuid $USER:$GROUP \
+        --exec $DAEMON -- $ARGS >> $LOGFILE 2>&1
+    echo 'Service started' >&2
+}
+
+stop() {
+    if [ ! -f "$PIDFILE" ] || ! kill -0 $(cat "$PIDFILE") 2>/dev/null; then
+        echo 'Service not running' >&2
+        return 1
+    fi
+    echo 'Stopping service…' >&2
+    start-stop-daemon --stop --quiet --pidfile $PIDFILE --name process-exporter
+    rm -f $PIDFILE
+    echo 'Service stopped' >&2
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    status)
+        if [ -f $PIDFILE ] && kill -0 $(cat $PIDFILE) 2>/dev/null; then
+            echo "Service is running"
+        else
+            echo "Service is stopped"
+        fi
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+        ;;
+esac
+
+exit 0
