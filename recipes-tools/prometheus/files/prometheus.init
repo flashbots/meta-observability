@@ -12,7 +12,6 @@ NAME=prometheus
 DAEMON=/usr/bin/prometheus
 PIDFILE=/var/run/$NAME/$NAME.pid
 LOGFILE=/tmp/$NAME.log
-DAEMON_ARGS="--config.file=/etc/prometheus/prometheus.yml"
 USER=prometheus
 GROUP=prometheus
 
@@ -25,13 +24,13 @@ start() {
     chown $USER:$GROUP /var/run/$NAME
     touch $LOGFILE
     chown $USER:$GROUP $LOGFILE
-    start-stop-daemon --start --quiet --background --make-pidfile --pidfile $PIDFILE --chuid $USER:$GROUP --exec $DAEMON -- $DAEMON_ARGS > $LOGFILE 2>&1
+    start-stop-daemon --start --quiet --pidfile $PIDFILE --make-pidfile --chuid $USER:$GROUP --background --exec /bin/sh -- -c "exec $DAEMON $ARGS 2>&1 | tee -a $LOGFILE"
     echo "$NAME started"
 }
 
 stop() {
     echo "Stopping $NAME"
-    start-stop-daemon --stop --quiet --pidfile $PIDFILE
+    start-stop-daemon --stop --pidfile $PIDFILE
     rm -f $PIDFILE
     echo "$NAME stopped"
 }
