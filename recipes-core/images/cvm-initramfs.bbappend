@@ -1,1 +1,1 @@
-PACKAGE_INSTALL:append = " fluent-bit prometheus node-exporter"
+PACKAGE_INSTALL:append = " fluent-bit prometheus node-exporter process-exporter"
