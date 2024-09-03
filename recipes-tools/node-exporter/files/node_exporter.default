@@ -1,0 +1,17 @@
+# Default settings for node_exporter
+
+# Options to pass to node_exporter
+ARGS=""
+
+# User and group to run node_exporter as
+USER="node_exporter"
+GROUP="node_exporter"
+
+# Path to the node_exporter binary
+DAEMON="/usr/bin/node_exporter"
+
+# Path to the PID file
+PIDFILE="/var/run/node_exporter.pid"
+
+# Path to the log file
+LOGFILE="/tmp/node_exporter.log"
