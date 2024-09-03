@@ -30,8 +30,25 @@ start() {
 
 stop() {
     echo "Stopping $NAME"
-    start-stop-daemon --stop --pidfile $PIDFILE
-    rm -f $PIDFILE
+    if [ -f $PIDFILE ]; then
+        PID=$(cat $PIDFILE)
+        # Find all child processes of the shell process
+        PIDS="$PID $(pgrep -P $PID)"
+        
+        # Send SIGTERM to all processes
+        for pid in $PIDS; do
+            kill -TERM $pid 2>/dev/null
+        done
+        
+        # Send SIGKILL to any remaining processes
+        for pid in $PIDS; do
+            kill -KILL $pid 2>/dev/null
+        done
+        
+        rm -f $PIDFILE
+    else
+        echo "$PIDFILE not found, $NAME may not be running"
+    fi
     echo "$NAME stopped"
 }
 

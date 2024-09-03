@@ -30,15 +30,32 @@ start() {
         echo "Error: Configuration file $CONFIG_FILE not found" >> $LOGFILE
         return 1
     fi
-    start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON --chuid $USER:$GROUP \
-        --background --make-pidfile -- $DAEMON_ARGS >> $LOGFILE 2>&1
+    start-stop-daemon --start --quiet --background --make-pidfile --pidfile $PIDFILE --chuid $USER:$GROUP \
+        --exec /bin/sh -- -c "exec $DAEMON $DAEMON_ARGS 2>&1 | tee -a $LOGFILE"
     echo "$NAME started. Log file: $LOGFILE"
 }
 
 stop() {
     echo "Stopping $NAME"
-    start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
-    rm -f $PIDFILE
+    if [ -f $PIDFILE ]; then
+        PID=$(cat $PIDFILE)
+        # Find all child processes of the shell process
+        PIDS="$PID $(pgrep -P $PID)"
+        
+        # Send SIGTERM to all processes
+        for pid in $PIDS; do
+            kill -TERM $pid 2>/dev/null
+        done
+        
+        # Send SIGKILL to any remaining processes
+        for pid in $PIDS; do
+            kill -KILL $pid 2>/dev/null
+        done
+        
+        rm -f $PIDFILE
+    else
+        echo "$PIDFILE not found, $NAME may not be running"
+    fi
     echo "$NAME stopped"
 }
 

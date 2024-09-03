@@ -9,38 +9,52 @@
 ### END INIT INFO
 
 # Set default values
+NAME="node_exporter"
 DAEMON="/usr/bin/node_exporter"
 USER="node_exporter"
 GROUP="node_exporter"
 PIDFILE="/var/run/node_exporter.pid"
 LOGFILE="/tmp/node_exporter.log"
-ARGS=""
+DAEMON_ARGS=""
 
 # Read configuration variable file if it is present
 [ -r /etc/default/node_exporter ] && . /etc/default/node_exporter
 
 start() {
     if [ -f $PIDFILE ] && kill -0 $(cat $PIDFILE) 2>/dev/null; then
-        echo 'Service already running' >&2
+        echo "$NAME is already running"
         return 1
     fi
-    echo 'Starting service…' >&2
+    echo "Starting $NAME…"
     start-stop-daemon --start --quiet --background \
         --make-pidfile --pidfile $PIDFILE \
         --chuid $USER:$GROUP \
-        --exec $DAEMON -- $ARGS >> $LOGFILE 2>&1
-    echo 'Service started' >&2
+        --exec /bin/sh -- -c "exec $DAEMON $DAEMON_ARGS 2>&1 | tee -a $LOGFILE"
+    echo "$NAME started"
 }
 
 stop() {
-    if [ ! -f "$PIDFILE" ] || ! kill -0 $(cat "$PIDFILE") 2>/dev/null; then
-        echo 'Service not running' >&2
-        return 1
+    echo "Stopping $NAME"
+    if [ -f $PIDFILE ]; then
+        PID=$(cat $PIDFILE)
+        # Find all child processes of the shell process
+        PIDS="$PID $(pgrep -P $PID)"
+        
+        # Send SIGTERM to all processes
+        for pid in $PIDS; do
+            kill -TERM $pid 2>/dev/null
+        done
+        
+        # Send SIGKILL to any remaining processes
+        for pid in $PIDS; do
+            kill -KILL $pid 2>/dev/null
+        done
+        
+        rm -f $PIDFILE
+    else
+        echo "$PIDFILE not found, $NAME may not be running"
     fi
-    echo 'Stopping service…' >&2
-    start-stop-daemon --stop --quiet --pidfile $PIDFILE --name node_exporter
-    rm -f $PIDFILE
-    echo 'Service stopped' >&2
+    echo "$NAME stopped"
 }
 
 case "$1" in
