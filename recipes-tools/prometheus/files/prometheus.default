@@ -16,7 +16,8 @@ LOG_FILE="/tmp/prometheus.log"
 
 # Additional arguments to pass to prometheus
 ARGS="--config.file=${CONFIG} \
-      --storage.tsdb.path=${DATA_DIR} \
+      --enable-feature=agent \
+      --storage.agent.path=${DATA_DIR} \
       --web.console.templates=/usr/share/prometheus/consoles \
       --web.console.libraries=/usr/share/prometheus/console_libraries"
 

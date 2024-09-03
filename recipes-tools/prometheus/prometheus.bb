@@ -10,7 +10,8 @@ PV = "2.54.0"
 
 SRC_URI = "https://github.com/prometheus/prometheus/releases/download/v${PV}/prometheus-${PV}.linux-amd64.tar.gz \
            file://prometheus.init \
-           file://prometheus.default"
+           file://prometheus.default \
+           file://prometheus.yml"
 
 SRC_URI[sha256sum] = "465e1393a0cca9705598f6ffaf96ffa78d0347808ab21386b0c6aaec2cf7aa13"
 
@@ -26,7 +27,7 @@ do_install() {
     install -m 0755 ${S}/promtool ${D}${bindir}
 
     install -d ${D}${sysconfdir}/prometheus
-    install -m 0644 ${S}/prometheus.yml ${D}${sysconfdir}/prometheus/
+    install -m 0644 ${WORKDIR}/prometheus.yml ${D}${sysconfdir}/prometheus/
 
     install -d ${D}${sysconfdir}/init.d
     install -m 0755 ${WORKDIR}/prometheus.init ${D}${sysconfdir}/init.d/prometheus
