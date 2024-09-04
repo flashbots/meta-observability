@@ -54,6 +54,6 @@ pkg_postinst_ontarget:${PN}() {
 }
 
 INITSCRIPT_NAME = "prometheus"
-INITSCRIPT_PARAMS = "defaults 85 15"
+INITSCRIPT_PARAMS = "defaults 92"
 
 FILES:${PN} += "${sysconfdir} ${datadir}/prometheus /var/lib/prometheus"

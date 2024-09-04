@@ -44,6 +44,6 @@ pkg_postinst_ontarget:${PN}() {
 }
 
 INITSCRIPT_NAME = "node_exporter"
-INITSCRIPT_PARAMS = "defaults 95 15"
+INITSCRIPT_PARAMS = "defaults 92"
 
 FILES:${PN} += "${sysconfdir} /var/lib/node_exporter"

@@ -49,7 +49,7 @@ pkg_postinst_ontarget:${PN}() {
 }
 
 INITSCRIPT_NAME = "process-exporter"
-INITSCRIPT_PARAMS = "defaults 95 15"
+INITSCRIPT_PARAMS = "defaults 92"
 
 FILES:${PN} += "${sysconfdir} /var/lib/process-exporter"
 

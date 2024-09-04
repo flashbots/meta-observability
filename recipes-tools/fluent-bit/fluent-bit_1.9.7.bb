@@ -120,4 +120,4 @@ pkg_postinst_ontarget:${PN}() {
 FILES:${PN} += "${sysconfdir}"
 
 INITSCRIPT_NAME = "td-agent-bit"
-INITSCRIPT_PARAMS = "defaults 85 15"
+INITSCRIPT_PARAMS = "defaults 92"
