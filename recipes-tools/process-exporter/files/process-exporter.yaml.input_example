@@ -1,0 +1,11 @@
+# process_exporter:
+#   process_names:
+#   - name: lighthouse
+#     cmdline:
+#     - '^\/([-.0-9a-zA-Z]+\/)*lighthouse[-.0-9a-zA-Z]* '
+#   - name: rbuilder
+#     cmdline:
+#     - '^\/([-.0-9a-zA-Z]+\/)*rbuilder[-.0-9a-zA-Z]* '
+#   - name: reth
+#     cmdline:
+#     - '^\/([-.0-9a-zA-Z]+\/)*reth[-.0-9a-zA-Z]* '
