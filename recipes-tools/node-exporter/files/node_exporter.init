@@ -14,7 +14,7 @@ DAEMON="/usr/bin/node_exporter"
 USER="node_exporter"
 GROUP="node_exporter"
 PIDFILE="/var/run/node_exporter.pid"
-LOGFILE="/tmp/node_exporter.log"
+LOGFILE="/var/log/node_exporter.log"
 DAEMON_ARGS=""
 
 # Read configuration variable file if it is present
