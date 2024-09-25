@@ -1,4 +1,23 @@
 {{#fluentbit}}
-[{{section_name}}]
-  {{configuration}}
+[SERVICE]
+  flush 1
+  daemon off
+  log_level info
+
+[INPUT]
+  name tail
+  path /var/log/*.log
+  db /tmp/fluentbit.db
+  tag {{input_tags}}
+
+[OUTPUT]
+  name cloudwatch_logs
+  match *
+  region us-east-2
+  log_group_name {{output_cw_log_group_name}}
+  log_stream_template $instance_name
+  log_stream_prefix {{output_cw_log_stream_prefix}}
+  auto_create_group On
+  log_format json
+  log_retention_days 90
 {{/fluentbit}}

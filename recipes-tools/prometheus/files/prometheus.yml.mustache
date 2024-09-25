@@ -67,18 +67,6 @@ scrape_configs:
       {{/prometheus.static_configs_default_labels}}
   {{/prometheus.rbuilder_metrics.enabled}}
 
-  {{#prometheus.scrape_configs}}
-  - job_name: {{job_name}}
-    static_configs:
-    {{#static_configs}}
-    - targets: {{targets}}
-      labels:
-      {{#labels}}
-        {{label_key}}: {{label_value}}
-      {{/labels}}
-    {{/static_configs}}
-  {{/prometheus.scrape_configs}}
-
 remote_write:
   {{#prometheus.remote_write}}
   - name: {{name}}
