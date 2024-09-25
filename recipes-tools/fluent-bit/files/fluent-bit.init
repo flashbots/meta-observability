@@ -14,7 +14,7 @@ DAEMON=/usr/bin/$NAME
 CONFIG_FILE=/etc/fluent-bit/fluent-bit.yaml
 DAEMON_ARGS="-c $CONFIG_FILE"
 PIDFILE=/var/run/$NAME.pid
-LOGFILE=/tmp/$NAME.log
+LOGFILE=/var/log/$NAME.log
 USER=fluentbit
 GROUP=fluentbit
 

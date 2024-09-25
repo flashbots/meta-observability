@@ -11,7 +11,7 @@
 NAME=prometheus
 DAEMON=/usr/bin/prometheus
 PIDFILE=/var/run/$NAME/$NAME.pid
-LOGFILE=/tmp/$NAME.log
+LOGFILE=/var/log/$NAME.log
 USER=prometheus
 GROUP=prometheus
 

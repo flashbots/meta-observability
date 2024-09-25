@@ -14,7 +14,7 @@ DAEMON="/usr/bin/process-exporter"
 USER="process-exporter"
 GROUP="process-exporter"
 PIDFILE="/var/run/process-exporter.pid"
-LOGFILE="/tmp/process-exporter.log"
+LOGFILE="/var/log/process-exporter.log"
 CONFIG="/etc/process-exporter/process-exporter.yaml"
 DAEMON_ARGS="-config.path=$CONFIG"
 
