@@ -11,7 +11,7 @@
 
 NAME=td-agent-bit
 DAEMON=/usr/bin/$NAME
-CONFIG_FILE=/etc/fluent-bit/fluent-bit.yaml
+CONFIG_FILE=/etc/td-agent-bit/td-agent-bit.conf
 DAEMON_ARGS="-c $CONFIG_FILE"
 PIDFILE=/var/run/$NAME.pid
 LOGFILE=/var/log/$NAME.log
