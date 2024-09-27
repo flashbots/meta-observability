@@ -32,7 +32,7 @@
     "remote_write": [
       {
         "name": "tdx-rbuilder-collector",
-        "url": "https://aps-workspaces.us-east-2.amazonaws.com/workspaces/ws-66511cf1-090f-4a97-a448-1c61619db4f0/api/v1/remote_write"
+        "url": "https://aps-workspaces.us-east-2.amazonaws.com/workspaces/ws-xxx/api/v1/remote_write"
       }
     ]
   }
