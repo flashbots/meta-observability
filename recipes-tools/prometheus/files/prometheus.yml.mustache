@@ -1,0 +1,91 @@
+global:
+{{#prometheus.scrape_interval}}
+  scrape_interval: {{.}}
+{{/prometheus.scrape_interval}}
+{{^prometheus.scrape_interval}}
+  # default
+  scrape_interval: 15s
+{{/prometheus.scrape_interval}}
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+    - targets: ["localhost:9090"]
+      labels:
+      {{#prometheus.static_configs_default_labels}}
+        {{label_key}}: {{label_value}}
+      {{/prometheus.static_configs_default_labels}}
+
+  - job_name: "node-exporter"
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ["localhost:9100"]
+      labels:
+      {{#prometheus.static_configs_default_labels}}
+        {{label_key}}: {{label_value}}
+      {{/prometheus.static_configs_default_labels}}
+
+  - job_name: "process-exporter"
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ["localhost:9256"]
+      labels:
+      {{#prometheus.static_configs_default_labels}}
+        {{label_key}}: {{label_value}}
+      {{/prometheus.static_configs_default_labels}}
+
+  {{#prometheus.lighthouse_metrics.enabled}}
+  - job_name: "lighthouse"
+    metrics_path: "/"
+    static_configs:
+    - targets: {{prometheus.lighthouse_metrics.targets}}
+      labels:
+      {{#prometheus.static_configs_default_labels}}
+        {{label_key}}: {{label_value}}
+      {{/prometheus.static_configs_default_labels}}
+  {{/prometheus.lighthouse_metrics.enabled}}
+
+  {{#prometheus.reth_metrics.enabled}}
+  - job_name: "reth"
+    metrics_path: "/"
+    static_configs:
+    - targets: {{prometheus.reth_metrics.targets}}
+      labels:
+      {{#prometheus.static_configs_default_labels}}
+        {{label_key}}: {{label_value}}
+      {{/prometheus.static_configs_default_labels}}
+  {{/prometheus.reth_metrics.enabled}}
+
+  {{#prometheus.rbuilder_metrics.enabled}}
+  - job_name: "rbuilder"
+    metrics_path: "/debug/metrics/prometheus"
+    static_configs:
+    - targets: {{prometheus.rbuilder_metrics.targets}}
+      labels:
+      {{#prometheus.static_configs_default_labels}}
+        {{label_key}}: {{label_value}}
+      {{/prometheus.static_configs_default_labels}}
+  {{/prometheus.rbuilder_metrics.enabled}}
+
+remote_write:
+  {{#prometheus.remote_write}}
+  - name: {{name}}
+    url: {{url}}
+    {{#sigv4}}
+    sigv4:
+      profile: {{profile}}
+      region: {{region}}
+    {{/sigv4}}
+
+    {{#basic_auth}}
+    basic_auth:
+      username: {{username}}
+      password_file: {{password_file}}
+    {{/basic_auth}}
+
+    {{#authorization}}
+    authorization:
+      type: {{type}}
+      credentials_file: {{credentials_file}}
+    {{/authorization}}
+  {{/prometheus.remote_write}}

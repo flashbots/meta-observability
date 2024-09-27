@@ -1,0 +1,39 @@
+{
+  "prometheus": {
+    "scrape_interval": "10s",
+    "static_configs_default_labels": [
+      {
+        "label_key": "flashbots_net_vendor",
+        "label_value": "azure"
+      },
+      {
+        "label_key": "flashbots_net_chain",
+        "label_value": "mainnet"
+      }
+    ],
+    "lighthouse_metrics": {
+      "enabled": true,
+      "targets": [
+        "localhost:5054"
+      ]
+    },
+    "reth_metrics": {
+      "enabled": true,
+      "targets": [
+        "localhost:9001"
+      ]
+    },
+    "rbuilder_metrics": {
+      "enabled": true,
+      "targets": [
+        "localhost:6069"
+      ]
+    },
+    "remote_write": [
+      {
+        "name": "tdx-rbuilder-collector",
+        "url": "https://aps-workspaces.us-east-2.amazonaws.com/workspaces/ws-xxx/api/v1/remote_write"
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "fluentbit": {
+    "input_tags": "tag-1 tag-2",
+    "output_cw_log_group_name": "multioperator-builder",
+    "output_cw_log_stream_prefix": "builder-01-"
+  }
+}
