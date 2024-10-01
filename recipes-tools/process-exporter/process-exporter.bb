@@ -11,7 +11,7 @@ PV = "0.8.3"
 SRC_URI = "https://github.com/ncabatoff/process-exporter/releases/download/v${PV}/process-exporter-${PV}.linux-amd64.tar.gz \
            file://process-exporter.init \
            file://process-exporter.default \
-           file://process-exporter.yaml"
+           file://process-exporter.yaml.mustache"
 
 SRC_URI[sha256sum] = "249db36771a4e66eaacca0ce31294de200df30eaf59a190c46639b98c5815969"
 
@@ -26,7 +26,7 @@ do_install() {
     install -m 0755 ${S}/process-exporter ${D}${bindir}
 
     install -d ${D}${sysconfdir}/process-exporter
-    install -m 0644 ${WORKDIR}/process-exporter.yaml ${D}${sysconfdir}/process-exporter/
+    install -m 0644 ${WORKDIR}/process-exporter.yaml.mustache ${D}${sysconfdir}/process-exporter/
 
     install -d ${D}${sysconfdir}/init.d
     install -m 0755 ${WORKDIR}/process-exporter.init ${D}${sysconfdir}/init.d/process-exporter

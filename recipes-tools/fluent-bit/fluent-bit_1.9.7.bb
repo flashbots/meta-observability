@@ -24,6 +24,7 @@ SRC_URI = "https://releases.fluentbit.io/1.9/source-${PV}.tar.gz;subdir=fluent-b
            file://0006-monkey-Fix-TLS-detection-testcase.patch \
            file://0007-cmake-Do-not-check-for-upstart-on-build-host.patch \
            file://fluent-bit.init \
+           file://td-agent-bit.conf.mustache \
            "
 SRC_URI:remove:x86 = "file://0002-mbedtls-Remove-unused-variable.patch"
 SRC_URI:append:libc-musl = "\
@@ -103,12 +104,12 @@ do_install:append() {
         mv ${D}/usr/etc/td-agent-bit/* ${D}${sysconfdir}/td-agent-bit/
         rm -rf ${D}/usr/etc
     fi
+    install -m 0644 ${WORKDIR}/td-agent-bit.conf.mustache ${D}${sysconfdir}/td-agent-bit/
 
     install -d ${D}/var/lib/td-agent-bit
     # Set correct ownership and permissions
     chown -R fluentbit:fluentbit ${D}/var/lib/td-agent-bit
-    chown fluentbit:fluentbit ${D}${sysconfdir}/td-agent-bit/td-agent-bit.conf
-    chmod 0644 ${D}${sysconfdir}/td-agent-bit/td-agent-bit.conf
+    chown -R fluentbit:fluentbit ${D}${sysconfdir}/td-agent-bit
 }
 
 pkg_postinst_ontarget:${PN}() {
