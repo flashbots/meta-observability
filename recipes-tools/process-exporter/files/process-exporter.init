@@ -1,7 +1,7 @@
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          process-exporter
-# Required-Start:    $local_fs $network $named $time $syslog
+# Required-Start:    $local_fs $network $named $time $syslog fetch-config
 # Required-Stop:     $local_fs $network $named $time $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
@@ -40,17 +40,17 @@ stop() {
         PID=$(cat $PIDFILE)
         # Find all child processes of the shell process
         PIDS="$PID $(pgrep -P $PID)"
-        
+
         # Send SIGTERM to all processes
         for pid in $PIDS; do
             kill -TERM $pid 2>/dev/null
         done
-        
+
         # Send SIGKILL to any remaining processes
         for pid in $PIDS; do
             kill -KILL $pid 2>/dev/null
         done
-        
+
         rm -f $PIDFILE
     else
         echo "$PIDFILE not found, $NAME may not be running"

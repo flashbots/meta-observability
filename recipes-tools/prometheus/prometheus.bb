@@ -28,6 +28,7 @@ do_install() {
 
     install -d ${D}${sysconfdir}/prometheus
     install -m 0644 ${WORKDIR}/prometheus.yml.mustache ${D}${sysconfdir}/prometheus/
+    install -m 0640 ${WORKDIR}/prometheus.yml.mustache ${D}${sysconfdir}/prometheus/prometheus.yml
 
     install -d ${D}${sysconfdir}/init.d
     install -m 0755 ${WORKDIR}/prometheus.init ${D}${sysconfdir}/init.d/prometheus

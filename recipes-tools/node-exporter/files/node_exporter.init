@@ -15,7 +15,7 @@ USER="node_exporter"
 GROUP="node_exporter"
 PIDFILE="/var/run/node_exporter.pid"
 LOGFILE="/var/log/node_exporter.log"
-DAEMON_ARGS=""
+DAEMON_ARGS="--web.listen-address=127.0.0.1:9100"
 
 # Read configuration variable file if it is present
 [ -r /etc/default/node_exporter ] && . /etc/default/node_exporter
@@ -39,17 +39,17 @@ stop() {
         PID=$(cat $PIDFILE)
         # Find all child processes of the shell process
         PIDS="$PID $(pgrep -P $PID)"
-        
+
         # Send SIGTERM to all processes
         for pid in $PIDS; do
             kill -TERM $pid 2>/dev/null
         done
-        
+
         # Send SIGKILL to any remaining processes
         for pid in $PIDS; do
             kill -KILL $pid 2>/dev/null
         done
-        
+
         rm -f $PIDFILE
     else
         echo "$PIDFILE not found, $NAME may not be running"
