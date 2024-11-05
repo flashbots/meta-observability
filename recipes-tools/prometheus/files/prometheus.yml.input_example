@@ -27,7 +27,7 @@
     "rbuilder_metrics": {
       "enabled": true,
       "targets": [
-        "localhost:6069"
+        "localhost:6060"
       ]
     },
     "remote_write": [
