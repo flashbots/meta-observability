@@ -7,6 +7,7 @@
 [INPUT]
   name tail
   path /var/log/*.log
+  path_key path
   db /tmp/fluentbit.db
   tag {{input_tags}}
 
@@ -15,9 +16,7 @@
   match *
   region us-east-2
   log_group_name {{output_cw_log_group_name}}
-  log_stream_template $instance_name
-  log_stream_prefix {{output_cw_log_stream_prefix}}
-  auto_create_group On
-  log_format json
-  log_retention_days 90
+  log_stream_template $path
+  log_stream_name {{output_cw_log_stream_name}}
+  log_key log
 {{/fluentbit}}
