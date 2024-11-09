@@ -19,6 +19,9 @@ scrape_configs:
     - source_labels: [__address__]
       target_label: instance_name
       replacement: {{prometheus.instance_name}}
+    - source_labels: [__address__]
+      target_label: instance
+      replacement: {{prometheus.instance_name}}
 
   - job_name: "node-exporter"
     metrics_path: "/metrics"
@@ -31,6 +34,9 @@ scrape_configs:
     relabel_configs:
     - source_labels: [__address__]
       target_label: instance_name
+      replacement: {{prometheus.instance_name}}
+    - source_labels: [__address__]
+      target_label: instance
       replacement: {{prometheus.instance_name}}
 
   - job_name: "process-exporter"
@@ -45,6 +51,9 @@ scrape_configs:
     - source_labels: [__address__]
       target_label: instance_name
       replacement: {{prometheus.instance_name}}
+    - source_labels: [__address__]
+      target_label: instance
+      replacement: {{prometheus.instance_name}}
 
   {{#prometheus.lighthouse_metrics.enabled}}
   - job_name: "lighthouse"
@@ -58,6 +67,9 @@ scrape_configs:
     relabel_configs:
     - source_labels: [__address__]
       target_label: instance_name
+      replacement: {{prometheus.instance_name}}
+    - source_labels: [__address__]
+      target_label: instance
       replacement: {{prometheus.instance_name}}
   {{/prometheus.lighthouse_metrics.enabled}}
 
@@ -75,6 +87,9 @@ scrape_configs:
     - source_labels: [__address__]
       target_label: instance_name
       replacement: {{prometheus.instance_name}}
+    - source_labels: [__address__]
+      target_label: instance
+      replacement: {{prometheus.instance_name}}
   {{/prometheus.reth_metrics.enabled}}
 
   {{#prometheus.rbuilder_metrics.enabled}}
@@ -89,6 +104,9 @@ scrape_configs:
     relabel_configs:
     - source_labels: [__address__]
       target_label: instance_name
+      replacement: {{prometheus.instance_name}}
+    - source_labels: [__address__]
+      target_label: instance
       replacement: {{prometheus.instance_name}}
   {{/prometheus.rbuilder_metrics.enabled}}
 
