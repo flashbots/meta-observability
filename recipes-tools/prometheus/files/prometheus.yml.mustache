@@ -110,6 +110,24 @@ scrape_configs:
       replacement: {{prometheus.instance_name}}
   {{/prometheus.rbuilder_metrics.enabled}}
 
+  {{#prometheus.orderflow_proxy_metrics.enabled}}
+  - job_name: "orderflow-proxy"
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: {{prometheus.orderflow_proxy_metrics.targets}}
+      labels:
+      {{#prometheus.static_configs_default_labels}}
+        {{label_key}}: {{label_value}}
+      {{/prometheus.static_configs_default_labels}}
+    relabel_configs:
+    - source_labels: [__address__]
+      target_label: instance_name
+      replacement: {{prometheus.instance_name}}
+    - source_labels: [__address__]
+      target_label: instance
+      replacement: {{prometheus.instance_name}}
+  {{/prometheus.orderflow_proxy_metrics.enabled}}
+
 remote_write:
   {{#prometheus.remote_write}}
   - name: {{name}}
