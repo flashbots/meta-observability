@@ -18,6 +18,8 @@ LOGFILE=/var/log/$NAME.log
 USER=fluentbit
 GROUP=fluentbit
 
+source /etc/td-agent-bit/aws-auth
+
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
 
