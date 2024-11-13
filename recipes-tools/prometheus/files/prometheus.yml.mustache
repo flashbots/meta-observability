@@ -18,10 +18,10 @@ scrape_configs:
     relabel_configs:
     - source_labels: [__address__]
       target_label: instance_name
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
     - source_labels: [__address__]
       target_label: instance
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
 
   - job_name: "node-exporter"
     metrics_path: "/metrics"
@@ -34,10 +34,10 @@ scrape_configs:
     relabel_configs:
     - source_labels: [__address__]
       target_label: instance_name
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
     - source_labels: [__address__]
       target_label: instance
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
 
   - job_name: "process-exporter"
     metrics_path: "/metrics"
@@ -50,14 +50,14 @@ scrape_configs:
     relabel_configs:
     - source_labels: [__address__]
       target_label: instance_name
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
     - source_labels: [__address__]
       target_label: instance
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
 
   {{#prometheus.lighthouse_metrics.enabled}}
   - job_name: "lighthouse"
-    metrics_path: "/"
+    metrics_path: "/metrics"
     static_configs:
     - targets: {{prometheus.lighthouse_metrics.targets}}
       labels:
@@ -67,10 +67,10 @@ scrape_configs:
     relabel_configs:
     - source_labels: [__address__]
       target_label: instance_name
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
     - source_labels: [__address__]
       target_label: instance
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
   {{/prometheus.lighthouse_metrics.enabled}}
 
 
@@ -86,10 +86,10 @@ scrape_configs:
     relabel_configs:
     - source_labels: [__address__]
       target_label: instance_name
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
     - source_labels: [__address__]
       target_label: instance
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
   {{/prometheus.reth_metrics.enabled}}
 
   {{#prometheus.rbuilder_metrics.enabled}}
@@ -104,10 +104,10 @@ scrape_configs:
     relabel_configs:
     - source_labels: [__address__]
       target_label: instance_name
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
     - source_labels: [__address__]
       target_label: instance
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
   {{/prometheus.rbuilder_metrics.enabled}}
 
   {{#prometheus.orderflow_proxy_metrics.enabled}}
@@ -122,10 +122,10 @@ scrape_configs:
     relabel_configs:
     - source_labels: [__address__]
       target_label: instance_name
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
     - source_labels: [__address__]
       target_label: instance
-      replacement: {{prometheus.instance_name}}
+      replacement: {{instance_name}}
   {{/prometheus.orderflow_proxy_metrics.enabled}}
 
 remote_write:
