@@ -128,6 +128,24 @@ scrape_configs:
       replacement: {{instance_name}}
   {{/prometheus.orderflow_proxy_metrics.enabled}}
 
+  {{#prometheus.haproxy_metrics.enabled}}
+  - job_name: "haproxy"
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: {{prometheus.haproxy_metrics.targets}}
+      labels:
+      {{#prometheus.static_configs_default_labels}}
+        {{label_key}}: {{label_value}}
+      {{/prometheus.static_configs_default_labels}}
+    relabel_configs:
+    - source_labels: [__address__]
+      target_label: instance_name
+      replacement: {{instance_name}}
+    - source_labels: [__address__]
+      target_label: instance
+      replacement: {{instance_name}}
+  {{/prometheus.haproxy_metrics.enabled}}
+
 remote_write:
   {{#prometheus.remote_write}}
   - name: {{name}}
