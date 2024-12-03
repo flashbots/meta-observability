@@ -2,6 +2,7 @@
   flush 1
   daemon off
   log_level info
+  parsers_file parsers.conf
 
 [INPUT]
   name tail
@@ -9,6 +10,13 @@
   path_key path
   db /tmp/fluentbit.db
   tag {{fluentbit.input_tags}}
+
+[INPUT]
+  name tail
+  path /var/log/containers/*.log
+  path_key path
+  tag {{fluentbit.input_tags}}
+  parser cri
 
 [OUTPUT]
   name cloudwatch_logs
