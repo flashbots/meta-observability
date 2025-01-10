@@ -27,6 +27,7 @@ start() {
         return 1
     fi
     echo "Starting $NAME…"
+    chown $USER:$GROUP $CONFIG
     start-stop-daemon --start --quiet --background \
         --make-pidfile --pidfile $PIDFILE \
         --chuid $USER:$GROUP \
