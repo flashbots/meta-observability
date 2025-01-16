@@ -32,8 +32,8 @@ start() {
         echo "Error: Configuration file $CONFIG_FILE not found" >> $LOGFILE
         return 1
     fi
-	touch $LOGFILE
-	chown $USER:$GROUP $LOGFILE
+    touch $LOGFILE
+    chown $USER:$GROUP $LOGFILE
     chmod 644 $LOGFILE
     start-stop-daemon --start --quiet --background --make-pidfile --pidfile $PIDFILE --chuid $USER:$GROUP \
         --exec /bin/sh -- -c "exec $DAEMON $DAEMON_ARGS &> $LOGFILE"
