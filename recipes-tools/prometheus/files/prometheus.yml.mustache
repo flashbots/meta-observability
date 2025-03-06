@@ -160,12 +160,12 @@ remote_write:
     {{#basic_auth}}
     basic_auth:
       username: {{username}}
-      password_file: {{password_file}}
+      password: {{password}}
     {{/basic_auth}}
 
     {{#authorization}}
     authorization:
       type: {{type}}
-      credentials_file: {{credentials_file}}
+      credentials: {{credentials}}
     {{/authorization}}
   {{/prometheus.remote_write}}
