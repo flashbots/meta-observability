@@ -18,13 +18,6 @@
   tag {{fluentbit.input_tags}}
   parser cri
 
-# In logs parsed by `cri` rename message -> log
-[FILTER]
-  name modify
-  match *
-  rename message log
-  condition key_exists logtag
-
 [OUTPUT]
   name cloudwatch_logs
   match *
