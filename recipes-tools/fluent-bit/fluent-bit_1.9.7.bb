@@ -23,6 +23,7 @@ SRC_URI = "https://releases.fluentbit.io/1.9/source-${PV}.tar.gz;subdir=fluent-b
            file://0005-stackdriver-Fix-return-type-mismatch.patch \
            file://0006-monkey-Fix-TLS-detection-testcase.patch \
            file://0007-cmake-Do-not-check-for-upstart-on-build-host.patch \
+           file://0008-cri-parsers.patch \
            file://fluent-bit.init \
            file://td-agent-bit.conf.mustache \
            file://aws-auth.mustache \
