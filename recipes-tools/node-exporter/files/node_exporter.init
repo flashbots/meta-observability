@@ -15,7 +15,7 @@ USER="node_exporter"
 GROUP="node_exporter"
 PIDFILE="/var/run/node_exporter.pid"
 LOGFILE="/var/log/node_exporter.log"
-DAEMON_ARGS="--web.listen-address=127.0.0.1:9100"
+DAEMON_ARGS="--web.listen-address=127.0.0.1:9100 --collector.textfile.directory=/var/lib/node_exporter/textfile_collector"
 
 # Read configuration variable file if it is present
 [ -r /etc/default/node_exporter ] && . /etc/default/node_exporter
