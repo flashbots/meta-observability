@@ -31,7 +31,7 @@ do_install() {
     install -m 0644 ${WORKDIR}/node_exporter.default ${D}${sysconfdir}/default/node_exporter
 
     # Create directory for Node Exporter data
-    install -d ${D}/var/lib/node_exporter
+    install -d ${D}/var/lib/node_exporter/textfile_collector
 
     # Set correct ownership
     chown -R node_exporter:node_exporter ${D}/var/lib/node_exporter
