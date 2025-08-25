@@ -9,74 +9,62 @@
 # Description:       Fluent Bit is a Fast and Lightweight Log processor and forwarder
 ### END INIT INFO
 
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 NAME=td-agent-bit
-DAEMON=/usr/bin/$NAME
-CONFIG_FILE=/etc/td-agent-bit/td-agent-bit.conf
-DAEMON_ARGS="-c $CONFIG_FILE"
-PIDFILE=/var/run/$NAME.pid
-LOGFILE=/var/log/$NAME.log
-USER=fluentbit
-GROUP=fluentbit
+DESC="FluentBit Service"
+LOG_DIR=/var/log/containers
+LOGFILE="$LOG_DIR/td-agent-bit.log"
+FLUENT_BIT_VERSION=3.2.10@sha256:d6dec000c4929a439562525728c708f6e99800d7ddc82efd6aa4f45f3a20b562
+FLUENT_BIT_ENV_FILE=/etc/td-agent-bit/aws-auth
+FLUENT_BIT_CONFIG_FILE=/etc/td-agent-bit/td-agent-bit.conf
+FLUENT_BIT_PARSERS_CONFIG_FILE=/etc/td-agent-bit/parsers.conf
 
-source /etc/td-agent-bit/aws-auth
+RUN_DIR=/var/run/fluentbit
+FLUENT_BIT_USER=fluentbit
+FLUENT_BIT_GROUP=fluentbit
 
-# Exit if the package is not installed
-[ -x "$DAEMON" ] || exit 0
-
-# Read configuration variable file if it is present
-[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+start_fluent_bit() {
+    podman run -dt --rm --restart on-failure --name $NAME \
+        # -v /var/log/:/var/log \ # Do I need this?
+        # -v $RUN_DIR:$RUN_DIR \
+        # --user $(id -u $FLUENT_BIT_USER):$(id -g $FLUENT_BIT_GROUP) \
+        -v $FLUENT_BIT_CONFIG_FILE:/td-agent-bit.conf \
+        -v $FLUENT_BIT_PARSERS_CONFIG_FILE:/parsers.conf \
+        --log-opt path=$LOGFILE --log-opt max-size=10mb \
+        --env-file $FLUENT_BIT_ENV_FILE \
+        docker.io/fluent/fluent-bit:$FLUENT_BIT_VERSION -c /td-agent-bit.conf
+}
 
 start() {
-    echo "Starting $NAME"
-    if [ ! -f "$CONFIG_FILE" ]; then
-        echo "Error: Configuration file $CONFIG_FILE not found" >> $LOGFILE
-        return 1
-    fi
-    touch $LOGFILE
-    chown $USER:$GROUP $LOGFILE
+    echo -n "Starting $DESC: "
+    echo "Starting $DESC" > /var/volatile/system-api.fifo
+
+    # Should I do this? 
+    # LOG_FILE is not defined
+    # if [ ! -f "$FLUENT_BIT_CONFIG_FILE" ]; then
+    #     echo "Error: Configuration file $FLUENT_BIT_CONFIG_FILE not found" >> $LOGFILE
+    #     return 1
+    # fi
+
+    # if [ ! -f "$FLUENT_BIT_PARSERS_CONFIG_FILE" ]; then
+    #     echo "Error: Configuration file $FLUENT_BIT_PARSERS_CONFIG_FILE not found" >> $LOGFILE
+    #     return 1
+    # fi
+
+    chmod 644 $FLUENT_BIT_CONFIG_FILE
+    chmod 644 $FLUENT_BIT_PARSERS_CONFIG_FILE
+
+    install -d -m 755 $LOG_DIR 
+    chown -R $FLUENT_BIT_USER:$FLUENT_BIT_GROUP $RUN_DIR
+
+    start_fluent_bit
     chmod 644 $LOGFILE
-    start-stop-daemon --start --quiet --background --make-pidfile --pidfile $PIDFILE --chuid $USER:$GROUP \
-        --exec /bin/sh -- -c "exec $DAEMON $DAEMON_ARGS &> $LOGFILE"
-    echo "$NAME started. Log file: $LOGFILE"
+    echo "$NAME."
 }
 
 stop() {
-    echo "Stopping $NAME"
-    if [ -f $PIDFILE ]; then
-        PID=$(cat $PIDFILE)
-        # Find all child processes of the shell process
-        PIDS="$PID $(pgrep -P $PID)"
-
-        # Send SIGTERM to all processes
-        for pid in $PIDS; do
-            kill -TERM $pid 2>/dev/null
-        done
-
-        # Send SIGKILL to any remaining processes
-        for pid in $PIDS; do
-            kill -KILL $pid 2>/dev/null
-        done
-
-        rm -f $PIDFILE
-    else
-        echo "$PIDFILE not found, $NAME may not be running"
-    fi
-    echo "$NAME stopped"
-}
-
-status() {
-    if [ -f $PIDFILE ]; then
-        if kill -0 $(cat $PIDFILE) 2>/dev/null; then
-            echo "$NAME is running"
-            return 0
-        else
-            echo "$NAME is not running but pid file exists"
-            return 1
-        fi
-    else
-        echo "$NAME is not running"
-        return 3
-    fi
+    echo "Stopping $DESC" | tee -a /var/volatile/system-api.fifo
+    podman stop $NAME
 }
 
 case "$1" in
@@ -86,7 +74,7 @@ case "$1" in
     stop)
         stop
         ;;
-    restart|force-reload)
+    restart|reload)
         stop
         start
         ;;
@@ -94,7 +82,8 @@ case "$1" in
         status
         ;;
     *)
-        echo "Usage: $0 {start|stop|restart|force-reload|status}"
+        N=/etc/init.d/$NAME
+        echo "Usage: $N {start|stop|restart|reload}" >&2
         exit 1
         ;;
 esac
