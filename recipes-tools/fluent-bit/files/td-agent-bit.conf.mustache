@@ -10,6 +10,7 @@
   path_key path
   db /tmp/fluentbit.db
   tag {{fluentbit.input_tags}}
+  threaded true
 
 [INPUT]
   name tail
@@ -17,6 +18,7 @@
   path_key path
   tag {{fluentbit.input_tags}}
   parser cri
+  threaded true
 
 [OUTPUT]
   name cloudwatch_logs
@@ -26,3 +28,4 @@
   log_key log
   log_stream_template {{instance_name}}-$path
   log_stream_prefix {{instance_name}}-
+  workers 10
