@@ -17,9 +17,7 @@ LOGFILE="$LOG_DIR/td-agent-bit.log"
 FLUENT_BIT_VERSION=3.2.10@sha256:d6dec000c4929a439562525728c708f6e99800d7ddc82efd6aa4f45f3a20b562
 FLUENT_BIT_ENV_FILE=/etc/td-agent-bit/aws-auth
 FLUENT_BIT_CONFIG_FILE=/etc/td-agent-bit/td-agent-bit.conf
-FLUENT_BIT_PARSERS_CONFIG_FILE=/etc/td-agent-bit/parsers.conf
 
-RUN_DIR=/var/run/fluentbit
 FLUENT_BIT_USER=fluentbit
 FLUENT_BIT_GROUP=fluentbit
 
@@ -27,7 +25,6 @@ start_fluent_bit() {
     podman run -dt --rm --restart on-failure --name $NAME \
         --user $(id -u $FLUENT_BIT_USER):$(id -g $FLUENT_BIT_GROUP) \
         -v $FLUENT_BIT_CONFIG_FILE:/td-agent-bit.conf \
-        -v $FLUENT_BIT_PARSERS_CONFIG_FILE:/parsers.conf \
         --log-opt path=$LOGFILE --log-opt max-size=10mb \
         --env-file $FLUENT_BIT_ENV_FILE \
         docker.io/fluent/fluent-bit:$FLUENT_BIT_VERSION -c /td-agent-bit.conf
