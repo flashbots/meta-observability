@@ -15,7 +15,6 @@ SECTION = "net"
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
 SRC_URI += "file://init \
-            file://LICENSE \
             file://aws-auth.mustache \
             file://td-agent-bit.conf.mustache"
 
