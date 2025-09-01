@@ -35,22 +35,15 @@ start() {
     echo "Starting $DESC" > /var/volatile/system-api.fifo
 
     install -d -m 755 $LOG_DIR 
+    touch $LOGFILE
+    chown fluentbit:fluentbit $LOGFILE
 
     if [ ! -f "$FLUENT_BIT_CONFIG_FILE" ]; then
         echo "Error: Configuration file $FLUENT_BIT_CONFIG_FILE not found" >> $LOGFILE
         return 1
     fi
 
-    if [ ! -f "$FLUENT_BIT_PARSERS_CONFIG_FILE" ]; then
-        echo "Error: Configuration file $FLUENT_BIT_PARSERS_CONFIG_FILE not found" >> $LOGFILE
-        return 1
-    fi
-
-    chmod 644 $FLUENT_BIT_CONFIG_FILE
-    chmod 644 $FLUENT_BIT_PARSERS_CONFIG_FILE
-
     start_fluent_bit
-    chmod 644 $LOGFILE
     echo "$NAME."
 }
 
