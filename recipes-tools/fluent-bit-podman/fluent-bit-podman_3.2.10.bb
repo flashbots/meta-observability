@@ -16,7 +16,8 @@ FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
 SRC_URI += "file://init \
             file://aws-auth.mustache \
-            file://td-agent-bit.conf.mustache"
+            file://td-agent-bit.conf.mustache \
+            file://parser.conf"
 
 INITSCRIPT_NAME = "td-agent-bit"
 INITSCRIPT_PARAMS = "defaults 98"
@@ -38,6 +39,7 @@ do_install() {
     install -d -m 0755 ${D}${sysconfdir}/td-agent-bit
     install -m 0600 ${THISDIR}/aws-auth.mustache ${D}${sysconfdir}/td-agent-bit/aws-auth.mustache
     install -m 0600 ${THISDIR}/td-agent-bit.conf.mustache ${D}${sysconfdir}/td-agent-bit/td-agent-bit.conf.mustache
+    install -m 0600 ${THISDIR}/parser.conf ${D}${sysconfdir}/td-agent-bit/parser.conf
     
     chown -R fluentbit:fluentbit ${D}${sysconfdir}/td-agent-bit/*
 }
@@ -45,3 +47,4 @@ do_install() {
 FILES:${PN} += "${sysconfdir}/init.d/${INITSCRIPT_NAME}"
 FILES:${PN} += "${sysconfdir}/td-agent-bit/aws-auth.mustache"
 FILES:${PN} += "${sysconfdir}/td-agent-bit/td-agent-bit.conf.mustache"
+FILES:${PN} += "${sysconfdir}/td-agent-bit/parser.conf"
