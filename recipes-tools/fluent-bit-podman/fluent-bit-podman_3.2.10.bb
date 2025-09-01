@@ -24,8 +24,6 @@ INITSCRIPT_PARAMS = "defaults 98"
 
 inherit update-rc.d useradd
 
-DEPENDS = "zlib bison-native flex-native openssl"
-
 USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM:${PN} = "-r fluentbit"
 USERADD_PARAM:${PN} = "-r -g fluentbit -d /var/lib/td-agent-bit -s /sbin/nologin -c 'Fluent Bit' fluentbit"
